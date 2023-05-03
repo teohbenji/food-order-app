@@ -1,4 +1,3 @@
-#include <conio.h>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -23,6 +22,7 @@ int getUserChoice(int num_of_choices);
 void orderFoodPage(UserInfo &userInfo, vector<Order> &orderVectors);
 void orderConfirmationPage(UserInfo &userInfo, vector<Order> &ordersVector, Order &order);
 void orderAddedPage(UserInfo &userInfo, vector<Order> &ordersVector);
+void viewOrderHistoryPage(UserInfo &userInfo, vector<Order> &ordersVector);
 void viewAddressPage(UserInfo &userInfo, vector<Order> &ordersVector);
 void editAddressPage(UserInfo &userInfo, vector<Order> &ordersVector);
 void mainMenuPage(UserInfo &userInfo, vector<Order> &orderVectors);
@@ -83,6 +83,15 @@ int getUserChoice(int num_of_choices) {
     cin >> choice;
     isChoiceValid = choice == "1" || choice == "2";
     }
+  } else {
+    bool isChoiceValid = choice == "1" ;
+
+    while(!isChoiceValid) {
+    cout << "\nInvalid choice! Your choice: ";
+
+    cin >> choice;
+    isChoiceValid = choice == "1";
+    }
   }
   
   return stoi(choice);
@@ -118,7 +127,7 @@ void orderFoodPage(UserInfo &userInfo, vector<Order> &ordersVector){
     }
   }
 
-  cout << "\nWhat would you like to order?";
+  cout << "\nYou chose to order from Restaurant" << order.restaurantName << ". What would you like to get?";
   cout << "\n1. Food Item 1" << "";
   cout << "\n2. Food Item 2" << "";
   cout << "\n3. Food Item 3" << "";
@@ -164,7 +173,7 @@ void orderAddedPage(UserInfo &userInfo, vector<Order> &ordersVector) {
       orderFoodPage(userInfo, ordersVector);
       break;
     case 2:
-      //TODO: add view orders page
+      viewOrderHistoryPage(userInfo, ordersVector);
       break;
     case 3:
       mainMenuPage(userInfo, ordersVector);
@@ -172,9 +181,34 @@ void orderAddedPage(UserInfo &userInfo, vector<Order> &ordersVector) {
   }
 } 
 
+void viewOrderHistoryPage(UserInfo &userInfo, vector<Order> &ordersVector) {
+  int numOfOrders = ordersVector.size();
+
+  if(numOfOrders == 0){
+    cout << "You have no previous orders. Why not order some food?";
+  } else {
+    cout << "\nYou have " << numOfOrders << " orders:";
+    for(int i = 0; i < numOfOrders; i++) {
+      Order order = ordersVector[i];
+      cout << "\n" << i + 1 << ". Restaurant " << order.restaurantName << ": Food Item " << order.itemNum;
+    }
+  }
+
+  cout << "\nEnter 1 to order food, or 2 to return to the main menu.";
+  cout << "\nYour choice: ";
+  int choice = getUserChoice(2);
+
+  if(choice == 1) {
+    orderFoodPage(userInfo, ordersVector);
+  } else {
+    mainMenuPage(userInfo, ordersVector);
+  }
+  
+}
+
 void viewAddressPage(UserInfo &userInfo, vector<Order> &ordersVector) {
   cout << "\n=====Address=====";
-  cout << "\nYour address is " << userInfo.address;
+  cout << "\nYour current address is " << userInfo.address;
   cout << "\n1. Edit address" << "";
   cout << "\n2. Return to main menu" << "";
   cout << "\nYour choice: ";
@@ -194,7 +228,7 @@ void viewAddressPage(UserInfo &userInfo, vector<Order> &ordersVector) {
 void editAddressPage(UserInfo &userInfo, vector<Order> &ordersVector) {
   string new_address;
   cout << "\n=====Edit address=====";
-  cout << "\nEnter your new address: ";
+  cout << "\nWhat would you like to change it to?";
   cin >> new_address;
   userInfo.address = new_address;
   cout << "Address updated";
@@ -217,6 +251,7 @@ void mainMenuPage(UserInfo &userInfo, vector<Order> &ordersVector) {
       orderFoodPage(userInfo, ordersVector);
       break;
     case 2:
+      viewOrderHistoryPage(userInfo, ordersVector);
       break;
     case 3:
       viewAddressPage(userInfo, ordersVector);
