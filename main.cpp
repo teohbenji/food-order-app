@@ -203,7 +203,6 @@ void viewOrderHistoryPage(UserInfo &userInfo, vector<Order> &ordersVector) {
   } else {
     mainMenuPage(userInfo, ordersVector);
   }
-  
 }
 
 void viewAddressPage(UserInfo &userInfo, vector<Order> &ordersVector) {
